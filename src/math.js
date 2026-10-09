@@ -6,4 +6,8 @@ function isEven(n) {
   return n % 2 === 0;
 }
 
-module.exports = { add, isEven };
+function multiply(a, b) {
+  return a * b;
+}
+
+module.exports = { add, isEven, multiply };
