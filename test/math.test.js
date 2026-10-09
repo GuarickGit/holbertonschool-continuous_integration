@@ -10,3 +10,7 @@ test("isEven detects even and odd numbers", () => {
   assert.strictEqual(isEven(4), true);
   assert.strictEqual(isEven(7), false);
 });
+
+test("this test fails on purpose", () => {
+  assert.strictEqual(add(2, 2), 5);
+});
