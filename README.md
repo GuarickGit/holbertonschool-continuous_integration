@@ -99,3 +99,22 @@ Successful run with the three matrix jobs: [CI #9](https://github.com/GuarickGit
 **Cache hit:** the log of the `Set up Node.js` step shows `Cache restored from key: node-cache-Linux-x64-npm-837a0abc...`, and the post step reports that the cache hit occurred and nothing is saved again. The first attempt of run #11 created the cache; attempt 2 restored it.
 
 **Reading the numbers:** the gain is small (about 1 s on setup and 3 s per job) because this app only has about 80 small packages, and `npm ci` was already fast. The cache matters more as the dependency tree grows. Total run time is also noisy, as it depends on how fast GitHub starts runners, so the per-step timings are the fairer comparison.
+
+### Task 4: secrets and control flow
+
+A third job, `deploy`, simulates a deployment:
+
+```yaml
+deploy:
+  needs: [lint, test]
+  if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+```
+
+- **Order (`needs`):** `deploy` only starts after `lint` and all three `test` matrix jobs have succeeded. If any of them fails, `deploy` does not run.
+- **Gating (`if`):** `deploy` only runs on a push to `main`. On any other branch, or on a pull request, it is skipped.
+- **Secret:** the repository secret `DEPLOY_TOKEN` is read through the `secrets` context and passed to the step as an environment variable (`DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}`). It is not hardcoded anywhere, and the script only checks that it is set without printing it; GitHub masks it as `***` in the logs. The token value is a dummy one, since the deployment is simulated.
+
+**Evidence:**
+
+- Push to `main`: [CI #13](https://github.com/GuarickGit/holbertonschool-continuous_integration/actions/runs/37906258413). `lint` and `test` run first, then `deploy` runs and succeeds.
+- Push to `chore/gating-demo`: [CI #14](https://github.com/GuarickGit/holbertonschool-continuous_integration/actions/runs/37906516325). `lint` and `test` pass, `deploy` is skipped.
