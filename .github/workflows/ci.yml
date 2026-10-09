@@ -44,3 +44,18 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+  deploy:
+    needs: [lint, test]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy (simulated)
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          if [ -z "$DEPLOY_TOKEN" ]; then
+            echo "DEPLOY_TOKEN is not set"
+            exit 1
+          fi
+          echo "Deploying with the configured token (value is never printed)"
