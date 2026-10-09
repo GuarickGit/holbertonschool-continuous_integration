@@ -78,3 +78,9 @@ Successful run: [CI #1](https://github.com/GuarickGit/holbertonschool-continuous
 - **Failing PR:** [#2 test: add deliberately failing test](https://github.com/GuarickGit/holbertonschool-continuous_integration/pull/2): the `test` check fails ([failing run](https://github.com/GuarickGit/holbertonschool-continuous_integration/actions/runs/37902300514/job/113727448290?pr=2)) while `lint` stays green.
 
 Each PR shows four checks (`lint` and `test`, once for the `push` event and once for the `pull_request` event), because both triggers fire when a branch with an open PR is pushed.
+
+### Task 2: test across Node versions
+
+The `test` job uses a matrix over Node.js `20`, `22` and `24`. GitHub creates one job per version (`test (20)`, `test (22)`, `test (24)`), and they run in parallel on separate runners. `fail-fast: false` is set so that each version finishes and reports its own status instead of being cancelled when another one fails.
+
+Successful run with the three matrix jobs: [CI #9](https://github.com/GuarickGit/holbertonschool-continuous_integration/actions/runs/37904377922)
