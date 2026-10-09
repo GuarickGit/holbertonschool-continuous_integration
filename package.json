@@ -1,0 +1,15 @@
+{
+  "name": "holbertonschool-continuous_integration",
+  "version": "1.0.0",
+  "description": "Small Node.js app used to practice CI with GitHub Actions",
+  "private": true,
+  "scripts": {
+    "lint": "eslint .",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.12.0",
+    "globals": "17.13.0"
+  }
+}
