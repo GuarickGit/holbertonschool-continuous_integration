@@ -24,43 +24,7 @@ npm test
 
 File: `.github/workflows/ci.yml`
 
-- **Trigger:** every `push`
-- **Runner:** `ubuntu-latest`
-- **Steps:**
-  1. Check out the code (`actions/checkout@v4`)
-  2. Set up Node.js 20 (`actions/setup-node@v4`)
-  3. Install dependencies with `npm ci`
-  4. Run the linter with `npm run lint`
-
-Successful run: [CI #1](https://github.com/GuarickGit/holbertonschool-continuous_integration/actions/runs/37900046763)
-
-# holbertonschool-continuous_integration
-
-Practice repository for Continuous Integration with GitHub Actions.
-
-## The app
-
-A small Node.js app used as a target for the CI pipeline:
-
-- `src/math.js`: two small functions (`add`, `isEven`)
-- `test/math.test.js`: tests using Node's built-in test runner
-- `eslint.config.js`: ESLint configuration
-
-Run it locally:
-
-```bash
-npm ci
-npm run lint
-npm test
-```
-
-## Pipeline
-
-### Task 0: first workflow
-
-File: `.github/workflows/ci.yml`
-
-- **Trigger:** every `push`
+- **Trigger:** every `push` (and, since task 1, every `pull_request`)
 - **Runner:** `ubuntu-latest`
 - **Steps:**
   1. Check out the code (`actions/checkout@v4`)
@@ -77,7 +41,7 @@ Successful run: [CI #1](https://github.com/GuarickGit/holbertonschool-continuous
 - **Passing PR:** [#1 feat: add multiply function with test](https://github.com/GuarickGit/holbertonschool-continuous_integration/pull/1): `lint` and `test` are green.
 - **Failing PR:** [#2 test: add deliberately failing test](https://github.com/GuarickGit/holbertonschool-continuous_integration/pull/2): the `test` check fails ([failing run](https://github.com/GuarickGit/holbertonschool-continuous_integration/actions/runs/37902300514/job/113727448290?pr=2)) while `lint` stays green.
 
-Each PR shows four checks (`lint` and `test`, once for the `push` event and once for the `pull_request` event), because both triggers fire when a branch with an open PR is pushed.
+At the time of this task, each PR showed four checks (`lint` and `test`, once for the `push` event and once for the `pull_request` event), because both triggers fire when a branch with an open PR is pushed.
 
 ### Task 2: test across Node versions
 
@@ -89,7 +53,7 @@ Successful run with the three matrix jobs: [CI #9](https://github.com/GuarickGit
 
 `actions/setup-node@v4` is configured with `cache: npm` in both jobs. The npm download cache (`~/.npm`) is keyed on the hash of `package-lock.json`, so it is restored as long as the lockfile does not change. All jobs (including the three matrix jobs) share the same cache, since the key does not depend on the Node version.
 
-**Measurements** (job `lint`, same commit content, only the cache differs):
+**Measurements** (job `lint`, same application code, only the cache configuration differs):
 
 |        | Run                                                                                                                              | Cache | Set up Node.js | Install dependencies     | Job total |
 | ------ | -------------------------------------------------------------------------------------------------------------------------------- | ----- | -------------- | ------------------------ | --------- |
